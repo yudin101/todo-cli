@@ -1,0 +1,148 @@
+#include <stdio.h>
+#include <errno.h>
+#include <unistd.h>
+
+#include "todo.h"
+
+int list_tasks(void) {
+  FILE *fptr = fopen(FILENAME, "r");
+
+  if (fptr == NULL) {
+    if (errno == ENOENT) {
+      fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
+      return 0;
+    } else {
+      perror("Error reading data file");
+      return 1;
+    }
+  }
+
+  td temp;
+  while (fscanf(fptr, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+                temp.text) == 3) {
+    printf("%d [%c] %s\n", temp.id, temp.is_complete ? 'X' : ' ', temp.text);
+  }
+
+  fclose(fptr);
+  return 0;
+}
+
+int add_task(char *text) {
+  int exists = access(FILENAME, F_OK);
+
+  FILE *fptr = fopen(FILENAME, "a+");
+
+  if (fptr == NULL) {
+    perror("Error opening data file");
+    return 1;
+  }
+
+  int last_id = 0;
+  int initial_is_complete = 0;
+  td temp;
+
+  if (exists == 0) {
+    while (fscanf(fptr, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+                  temp.text) == 3) {
+      last_id = temp.id;
+    }
+  }
+
+  fprintf(fptr, "%d, %d, %s\n", last_id + 1, initial_is_complete, text);
+
+  fclose(fptr);
+
+  return 0;
+}
+
+int remove_task(int id) {
+  FILE *flist = fopen(FILENAME, "r");
+  if (flist == NULL) {
+    perror("Error opening data file");
+    return 1;
+  }
+
+  FILE *ftemp = fopen(TEMP_FILENAME, "w");
+  if (ftemp == NULL) {
+    perror("Error creating temporary file");
+    fclose(flist);
+    return 1;
+  }
+
+  if (id == 0) {
+    fprintf(stderr, "Provide valid integer.\n");
+    return 1;
+  }
+
+  td temp;
+
+  while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+                temp.text) == 3) {
+    if (temp.id == id) {
+      continue; // Skip the task we want to delete
+    }
+
+    fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
+  }
+
+  fclose(flist);
+  fclose(ftemp);
+
+  remove(FILENAME);
+  rename(TEMP_FILENAME, FILENAME);
+
+  return 0;
+}
+
+int change_status(int id) {
+  FILE *flist = fopen(FILENAME, "r");
+  if (flist == NULL) {
+    perror("Error opening data file");
+    return 1;
+  }
+
+  FILE *ftemp = fopen(TEMP_FILENAME, "w");
+  if (ftemp == NULL) {
+    perror("Error creating temporary file");
+    fclose(flist);
+    return 1;
+  }
+
+  if (id == 0) {
+    fprintf(stderr, "Provide valid integer.\n");
+    return 1;
+  }
+
+  td temp;
+
+  while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+                temp.text) == 3) {
+    if (temp.id == id) {
+      int current_status = temp.is_complete;
+      int new_status = current_status == 0 ? 1 : 0;
+      fprintf(ftemp, "%d, %d, %s\n", temp.id, new_status, temp.text);
+      continue;
+    }
+
+    fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
+  }
+
+  fclose(flist);
+  fclose(ftemp);
+
+  remove(FILENAME);
+  rename(TEMP_FILENAME, FILENAME);
+
+  return 0;
+}
+
+void print_help(FILE *stream) {
+  fprintf(stream, "Usage:  todo COMMAND\n");
+  fprintf(stream, "Todo CLI - A simple task manager\n\n");
+  fprintf(stream, "Commands:\n");
+  fprintf(stream, "  %-12s List all tasks\n", "list");
+  fprintf(stream, "  %-12s Add a new task\n", "add");
+  fprintf(stream, "  %-12s Toggle task completion by ID\n", "cmp");
+  fprintf(stream, "  %-12s Remove a task by ID\n", "rm");
+  fprintf(stream, "  %-12s Show this menu\n", "help");
+}
