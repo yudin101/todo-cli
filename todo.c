@@ -50,18 +50,11 @@ int add_task(char *text) {
 }
 
 int edit_task(int id, char *text) {
-  FILE *flist = fopen(FILENAME, "r");
+  FILE *flist, *ftemp;
 
-  int res = check_empty(flist);
+  int res = init_src_dest(&flist, &ftemp);
   if (res != 0) {
     return res;
-  }
-
-  FILE *ftemp = fopen(TEMP_FILENAME, "w");
-  if (ftemp == NULL) {
-    perror("Error creating temporary file");
-    fclose(flist);
-    return -1;
   }
 
   if (id == 0) {
@@ -98,18 +91,11 @@ int edit_task(int id, char *text) {
 }
 
 int change_status(int id) {
-  FILE *flist = fopen(FILENAME, "r");
+  FILE *flist, *ftemp;
 
-  int res = check_empty(flist);
+  int res = init_src_dest(&flist, &ftemp);
   if (res != 0) {
     return res;
-  }
-
-  FILE *ftemp = fopen(TEMP_FILENAME, "w");
-  if (ftemp == NULL) {
-    perror("Error creating temporary file");
-    fclose(flist);
-    return -1;
   }
 
   if (id == 0) {
@@ -148,18 +134,11 @@ int change_status(int id) {
 }
 
 int remove_task(int id) {
-  FILE *flist = fopen(FILENAME, "r");
+  FILE *flist, *ftemp;
 
-  int res = check_empty(flist);
+  int res = init_src_dest(&flist, &ftemp);
   if (res != 0) {
     return res;
-  }
-
-  FILE *ftemp = fopen(TEMP_FILENAME, "w");
-  if (ftemp == NULL) {
-    perror("Error creating temporary file");
-    fclose(flist);
-    return -1;
   }
 
   if (id == 0) {

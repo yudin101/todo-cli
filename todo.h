@@ -22,5 +22,6 @@ void print_help(FILE *stream);
 
 // utils.c
 int check_empty(FILE *fptr);
+int init_src_dest(FILE **src, FILE **dest);
 
 #endif
