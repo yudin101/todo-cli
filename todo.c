@@ -49,7 +49,7 @@ int add_task(char *text) {
   return 0;
 }
 
-int remove_task(int id) {
+int edit_task(int id, char *text) {
   FILE *flist = fopen(FILENAME, "r");
 
   int res = check_empty(flist);
@@ -75,8 +75,9 @@ int remove_task(int id) {
   while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id) {
+      fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, text);
       found = 1;
-      continue; // Skip the task we want to delete
+      continue;
     }
 
     fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
@@ -146,12 +147,60 @@ int change_status(int id) {
   return 0;
 }
 
+int remove_task(int id) {
+  FILE *flist = fopen(FILENAME, "r");
+
+  int res = check_empty(flist);
+  if (res != 0) {
+    return res;
+  }
+
+  FILE *ftemp = fopen(TEMP_FILENAME, "w");
+  if (ftemp == NULL) {
+    perror("Error creating temporary file");
+    fclose(flist);
+    return -1;
+  }
+
+  if (id == 0) {
+    fprintf(stderr, "Error: Not a valid integer.\n");
+    return 1;
+  }
+
+  td temp;
+  int found = 0;
+
+  while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+                temp.text) == 3) {
+    if (temp.id == id) {
+      found = 1;
+      continue; // Skip the task we want to delete
+    }
+
+    fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
+  }
+
+  fclose(flist);
+  fclose(ftemp);
+
+  remove(FILENAME);
+  rename(TEMP_FILENAME, FILENAME);
+
+  if (!found) {
+    fprintf(stderr, "Error: Task ID %d not found.\n", id);
+    return 1;
+  }
+
+  return 0;
+}
+
 void print_help(FILE *stream) {
   fprintf(stream, "Usage:  todo COMMAND\n");
   fprintf(stream, "Todo CLI - A simple task manager\n\n");
   fprintf(stream, "Commands:\n");
   fprintf(stream, "  %-12s List all tasks\n", "list");
   fprintf(stream, "  %-12s Add a new task\n", "add");
+  fprintf(stream, "  %-12s Edit existing task by ID\n", "edt");
   fprintf(stream, "  %-12s Toggle task completion by ID\n", "cmp");
   fprintf(stream, "  %-12s Remove a task by ID\n", "rm");
   fprintf(stream, "  %-12s Show this menu\n", "help");

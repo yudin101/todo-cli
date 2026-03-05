@@ -22,6 +22,16 @@ int main(int argc, char *argv[]) {
     if (add_task(argv[2]) == 0) {
       list_tasks();
     }
+  } else if (strcmp(argv[1], "edt") == 0) {
+    if (argc < 4) {
+      fprintf(stderr, "Usage: todo edt <id> <text>\n");
+      return 1;
+    }
+
+    // Edit existing task
+    if (edit_task(atoi(argv[2]), argv[3]) == 0) {
+      list_tasks();
+    }
   } else if (strcmp(argv[1], "cmp") == 0) {
     if (argc < 3) {
       fprintf(stderr, "Usage: todo cmp <id>\n");
