@@ -24,5 +24,6 @@ void print_help(FILE *stream);
 int check_file(FILE *fptr);
 int init_src_dest(FILE **src, FILE **dest);
 int is_valid_int(char *arg);
+int is_found(int id, int found);
 
 #endif

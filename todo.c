@@ -70,10 +70,7 @@ int edit_task(char *arg, char *text) {
   remove(FILENAME);
   rename(TEMP_FILENAME, FILENAME);
 
-  if (!found) {
-    fprintf(stderr, "Error: Task ID %d not found.\n", id);
-    return 1;
-  }
+  is_found(id, found);
 
   return 0;
 }
@@ -107,10 +104,7 @@ int change_status(char *arg) {
   remove(FILENAME);
   rename(TEMP_FILENAME, FILENAME);
 
-  if (!found) {
-    fprintf(stderr, "Error: Task ID %d not found.\n", id);
-    return 1;
-  }
+  is_found(id, found);
 
   return 0;
 }
@@ -141,10 +135,7 @@ int remove_task(char *arg) {
   remove(FILENAME);
   rename(TEMP_FILENAME, FILENAME);
 
-  if (!found) {
-    fprintf(stderr, "Error: Task ID %d not found.\n", id);
-    return 1;
-  }
+  is_found(id, found);
 
   return 0;
 }

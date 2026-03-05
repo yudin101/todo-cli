@@ -54,3 +54,12 @@ int is_valid_int(char *arg) {
 
   return id;
 }
+
+int is_found(int id, int found) {
+  if (!found) {
+    fprintf(stderr, "Error: Task ID %d not found.\n", id);
+    exit(1);
+  }
+
+  return 0;
+}
