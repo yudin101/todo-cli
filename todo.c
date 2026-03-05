@@ -70,10 +70,12 @@ int remove_task(int id) {
   }
 
   td temp;
+  int found = 0;
 
   while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id) {
+      found = 1;
       continue; // Skip the task we want to delete
     }
 
@@ -85,6 +87,11 @@ int remove_task(int id) {
 
   remove(FILENAME);
   rename(TEMP_FILENAME, FILENAME);
+
+  if (!found) {
+    fprintf(stderr, "Error: Task ID %d not found.\n", id);
+    return 1;
+  }
 
   return 0;
 }
@@ -110,6 +117,7 @@ int change_status(int id) {
   }
 
   td temp;
+  int found = 0;
 
   while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
@@ -117,6 +125,7 @@ int change_status(int id) {
       int current_status = temp.is_complete;
       int new_status = current_status == 0 ? 1 : 0;
       fprintf(ftemp, "%d, %d, %s\n", temp.id, new_status, temp.text);
+      found = 1;
       continue;
     }
 
@@ -128,6 +137,11 @@ int change_status(int id) {
 
   remove(FILENAME);
   rename(TEMP_FILENAME, FILENAME);
+
+  if (!found) {
+    fprintf(stderr, "Error: Task ID %d not found.\n", id);
+    return 1;
+  }
 
   return 0;
 }
