@@ -11,20 +11,20 @@ long get_file_size(FILE *fptr) {
   return size;
 }
 
-int check_empty(FILE *fptr) {
+int check_file(FILE *fptr) {
   if (fptr == NULL) {
     if (errno == ENOENT) {
       fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
-      return 1;
+      exit(0);
     } else {
-      perror("Error reading data file");
-      return -1;
+      perror("Error opening data file");
+      exit(1);
     }
   }
 
   if (get_file_size(fptr) == 0) {
     fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
-    return 1;
+    exit(0);
   }
 
   return 0;
@@ -32,17 +32,14 @@ int check_empty(FILE *fptr) {
 
 int init_src_dest(FILE **src, FILE **dest) {
   *src = fopen(FILENAME, "r");
-  int res = check_empty(*src);
-  if (res != 0) {
-    return res;
-  }
+  check_file(*src);
 
   *dest = fopen(TEMP_FILENAME, "w");
 
   if (*dest == NULL) {
     perror("Error creating temporary file");
     fclose(*src);
-    return -1;
+    exit(1);
   }
 
   return 0;

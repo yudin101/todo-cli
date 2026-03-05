@@ -21,7 +21,7 @@ int remove_task(char *arg);
 void print_help(FILE *stream);
 
 // utils.c
-int check_empty(FILE *fptr);
+int check_file(FILE *fptr);
 int init_src_dest(FILE **src, FILE **dest);
 int is_valid_int(char *arg);
 

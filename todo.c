@@ -6,10 +6,7 @@
 int list_tasks(void) {
   FILE *fptr = fopen(FILENAME, "r");
 
-  int res = check_empty(fptr);
-  if (res != 0) {
-    return res;
-  }
+  check_file(fptr);
 
   td temp;
   while (fscanf(fptr, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
@@ -26,10 +23,7 @@ int add_task(char *text) {
 
   FILE *fptr = fopen(FILENAME, "a+");
 
-  if (fptr == NULL) {
-    perror("Error opening data file");
-    return -1;
-  }
+  check_file(fptr);
 
   int last_id = 0;
   int initial_is_complete = 0;
@@ -52,10 +46,7 @@ int add_task(char *text) {
 int edit_task(char *arg, char *text) {
   FILE *flist, *ftemp;
 
-  int res = init_src_dest(&flist, &ftemp);
-  if (res != 0) {
-    return res;
-  }
+  init_src_dest(&flist, &ftemp);
 
   int id = is_valid_int(arg);
 
@@ -90,10 +81,7 @@ int edit_task(char *arg, char *text) {
 int change_status(char *arg) {
   FILE *flist, *ftemp;
 
-  int res = init_src_dest(&flist, &ftemp);
-  if (res != 0) {
-    return res;
-  }
+  init_src_dest(&flist, &ftemp);
 
   int id = is_valid_int(arg);
 
@@ -130,10 +118,7 @@ int change_status(char *arg) {
 int remove_task(char *arg) {
   FILE *flist, *ftemp;
 
-  int res = init_src_dest(&flist, &ftemp);
-  if (res != 0) {
-    return res;
-  }
+  init_src_dest(&flist, &ftemp);
 
   int id = is_valid_int(arg);
 
