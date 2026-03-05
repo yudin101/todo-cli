@@ -65,7 +65,7 @@ int remove_task(int id) {
   }
 
   if (id == 0) {
-    fprintf(stderr, "Provide valid integer.\n");
+    fprintf(stderr, "Error: Not a valid integer.\n");
     return 1;
   }
 
@@ -112,7 +112,7 @@ int change_status(int id) {
   }
 
   if (id == 0) {
-    fprintf(stderr, "Provide valid integer.\n");
+    fprintf(stderr, "Error: Not a valid integer.\n");
     return 1;
   }
 
