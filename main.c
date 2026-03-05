@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 
 #include "todo.h"
 
@@ -29,7 +28,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Edit existing task
-    if (edit_task(atoi(argv[2]), argv[3]) == 0) {
+    if (edit_task(argv[2], argv[3]) == 0) {
       list_tasks();
     }
   } else if (strcmp(argv[1], "cmp") == 0) {
@@ -39,7 +38,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Change task status
-    if (change_status(atoi(argv[2])) == 0) {
+    if (change_status(argv[2]) == 0) {
       list_tasks();
     }
   } else if (strcmp(argv[1], "rm") == 0) {
@@ -49,7 +48,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Remove task with given id
-    if (remove_task(atoi(argv[2])) == 0) {
+    if (remove_task(argv[2]) == 0) {
       list_tasks();
     }
   } else if (strcmp(argv[1], "help") == 0) {

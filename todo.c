@@ -49,7 +49,7 @@ int add_task(char *text) {
   return 0;
 }
 
-int edit_task(int id, char *text) {
+int edit_task(char *arg, char *text) {
   FILE *flist, *ftemp;
 
   int res = init_src_dest(&flist, &ftemp);
@@ -57,10 +57,7 @@ int edit_task(int id, char *text) {
     return res;
   }
 
-  if (id == 0) {
-    fprintf(stderr, "Error: Not a valid integer.\n");
-    return 1;
-  }
+  int id = is_valid_int(arg);
 
   td temp;
   int found = 0;
@@ -90,7 +87,7 @@ int edit_task(int id, char *text) {
   return 0;
 }
 
-int change_status(int id) {
+int change_status(char *arg) {
   FILE *flist, *ftemp;
 
   int res = init_src_dest(&flist, &ftemp);
@@ -98,10 +95,7 @@ int change_status(int id) {
     return res;
   }
 
-  if (id == 0) {
-    fprintf(stderr, "Error: Not a valid integer.\n");
-    return 1;
-  }
+  int id = is_valid_int(arg);
 
   td temp;
   int found = 0;
@@ -133,7 +127,7 @@ int change_status(int id) {
   return 0;
 }
 
-int remove_task(int id) {
+int remove_task(char *arg) {
   FILE *flist, *ftemp;
 
   int res = init_src_dest(&flist, &ftemp);
@@ -141,10 +135,7 @@ int remove_task(int id) {
     return res;
   }
 
-  if (id == 0) {
-    fprintf(stderr, "Error: Not a valid integer.\n");
-    return 1;
-  }
+  int id = is_valid_int(arg);
 
   td temp;
   int found = 0;

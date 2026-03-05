@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "todo.h"
 
@@ -45,4 +46,14 @@ int init_src_dest(FILE **src, FILE **dest) {
   }
 
   return 0;
+}
+
+int is_valid_int(char *arg) {
+  int id = atoi(arg);
+  if (id == 0 && arg[0] != '0') {
+    fprintf(stderr, "Error: '%s' is not a valid ID.\n", arg);
+    exit(1);
+  }
+
+  return id;
 }
