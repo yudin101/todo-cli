@@ -6,8 +6,8 @@
 int list_tasks(void) {
   FILE *fptr = fopen(FILENAME, "r");
 
-  int res = check_exists(fptr);
-  if(res != 0) {
+  int res = check_empty(fptr);
+  if (res != 0) {
     return res;
   }
 
@@ -26,9 +26,9 @@ int add_task(char *text) {
 
   FILE *fptr = fopen(FILENAME, "a+");
 
-  int res = check_exists(fptr);
-  if(res != 0) {
-    return res;
+  if (fptr == NULL) {
+    perror("Error opening data file");
+    return -1;
   }
 
   int last_id = 0;
@@ -52,8 +52,8 @@ int add_task(char *text) {
 int remove_task(int id) {
   FILE *flist = fopen(FILENAME, "r");
 
-  int res = check_exists(flist);
-  if(res != 0) {
+  int res = check_empty(flist);
+  if (res != 0) {
     return res;
   }
 
@@ -92,8 +92,8 @@ int remove_task(int id) {
 int change_status(int id) {
   FILE *flist = fopen(FILENAME, "r");
 
-  int res = check_exists(flist);
-  if(res != 0) {
+  int res = check_empty(flist);
+  if (res != 0) {
     return res;
   }
 

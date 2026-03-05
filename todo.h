@@ -20,6 +20,6 @@ int change_status(int id);
 void print_help(FILE *stream);
 
 // utils.c
-int check_exists(FILE *fptr);
+int check_empty(FILE *fptr);
 
 #endif
