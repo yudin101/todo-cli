@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <errno.h>
 #include <unistd.h>
 
 #include "todo.h"
@@ -7,14 +6,9 @@
 int list_tasks(void) {
   FILE *fptr = fopen(FILENAME, "r");
 
-  if (fptr == NULL) {
-    if (errno == ENOENT) {
-      fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
-      return 0;
-    } else {
-      perror("Error reading data file");
-      return 1;
-    }
+  int res = check_exists(fptr);
+  if(res != 0) {
+    return res;
   }
 
   td temp;
@@ -32,9 +26,9 @@ int add_task(char *text) {
 
   FILE *fptr = fopen(FILENAME, "a+");
 
-  if (fptr == NULL) {
-    perror("Error opening data file");
-    return 1;
+  int res = check_exists(fptr);
+  if(res != 0) {
+    return res;
   }
 
   int last_id = 0;
@@ -57,16 +51,17 @@ int add_task(char *text) {
 
 int remove_task(int id) {
   FILE *flist = fopen(FILENAME, "r");
-  if (flist == NULL) {
-    perror("Error opening data file");
-    return 1;
+
+  int res = check_exists(flist);
+  if(res != 0) {
+    return res;
   }
 
   FILE *ftemp = fopen(TEMP_FILENAME, "w");
   if (ftemp == NULL) {
     perror("Error creating temporary file");
     fclose(flist);
-    return 1;
+    return -1;
   }
 
   if (id == 0) {
@@ -96,16 +91,17 @@ int remove_task(int id) {
 
 int change_status(int id) {
   FILE *flist = fopen(FILENAME, "r");
-  if (flist == NULL) {
-    perror("Error opening data file");
-    return 1;
+
+  int res = check_exists(flist);
+  if(res != 0) {
+    return res;
   }
 
   FILE *ftemp = fopen(TEMP_FILENAME, "w");
   if (ftemp == NULL) {
     perror("Error creating temporary file");
     fclose(flist);
-    return 1;
+    return -1;
   }
 
   if (id == 0) {

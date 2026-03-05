@@ -12,10 +12,14 @@ typedef struct Todo {
   char text[100];
 } td;
 
+// todo.c
 int list_tasks(void);
 int add_task(char *text);
 int remove_task(int id);
 int change_status(int id);
 void print_help(FILE *stream);
+
+// utils.c
+int check_exists(FILE *fptr);
 
 #endif
