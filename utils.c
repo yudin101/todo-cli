@@ -23,17 +23,17 @@ int check_file(FILE *fptr) {
     }
   }
 
-  if (get_file_size(fptr) == 0) {
-    fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
-    exit(0);
-  }
-
   return 0;
 }
 
 int init_src_dest(FILE **src, FILE **dest) {
   *src = fopen(FILENAME, "r");
   check_file(*src);
+
+  if (get_file_size(*src) == 0) {
+    fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
+    exit(0);
+  }
 
   *dest = fopen(TEMP_FILENAME, "w");
 
