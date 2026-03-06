@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "todo.h"
 
@@ -58,6 +59,15 @@ int is_valid_int(char *arg) {
 int is_found(int id, int found) {
   if (!found) {
     fprintf(stderr, "Error: Task ID %d not found.\n", id);
+    exit(1);
+  }
+
+  return 0;
+}
+
+int check_text_limit(char *text) {
+  if (strlen(text) >= MAX_TEXT) {
+    fprintf(stderr, "Error: Task too long. Max %d characters.\n", MAX_TEXT - 1);
     exit(1);
   }
 

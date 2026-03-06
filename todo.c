@@ -9,7 +9,7 @@ int list_tasks(void) {
   check_file(fptr);
 
   td temp;
-  while (fscanf(fptr, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     printf("%d [%c] %s\n", temp.id, temp.is_complete ? 'X' : ' ', temp.text);
   }
@@ -25,12 +25,14 @@ int add_task(char *text) {
 
   check_file(fptr);
 
+  check_text_limit(text);
+
   int last_id = 0;
   int initial_is_complete = 0;
   td temp;
 
   if (exists == 0) {
-    while (fscanf(fptr, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+    while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
                   temp.text) == 3) {
       last_id = temp.id;
     }
@@ -44,16 +46,17 @@ int add_task(char *text) {
 }
 
 int edit_task(char *arg, char *text) {
+  int id = is_valid_int(arg);
+  check_text_limit(text);
+
   FILE *flist, *ftemp;
 
   init_src_dest(&flist, &ftemp);
 
-  int id = is_valid_int(arg);
-
   td temp;
   int found = 0;
 
-  while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id) {
       fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, text);
@@ -85,7 +88,7 @@ int change_status(char *arg) {
   td temp;
   int found = 0;
 
-  while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id) {
       int current_status = temp.is_complete;
@@ -119,7 +122,7 @@ int remove_task(char *arg) {
   td temp;
   int found = 0;
 
-  while (fscanf(flist, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id) {
       found = 1;

@@ -6,10 +6,12 @@
 #define FILENAME "list.txt"
 #define TEMP_FILENAME "temp.txt"
 
+#define MAX_TEXT 256
+
 typedef struct Todo {
   int id;
   int is_complete;
-  char text[100];
+  char text[256];
 } td;
 
 // todo.c
@@ -25,5 +27,6 @@ int check_file(FILE *fptr);
 int init_src_dest(FILE **src, FILE **dest);
 int is_valid_int(char *arg);
 int is_found(int id, int found);
+int check_text_limit(char *text);
 
 #endif
