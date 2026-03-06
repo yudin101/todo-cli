@@ -6,10 +6,7 @@
 int list_tasks(void) {
   FILE *fptr = fopen(FILENAME, "r");
 
-  int res = check_empty(fptr);
-  if (res != 0) {
-    return res;
-  }
+  check_file(fptr);
 
   td temp;
   while (fscanf(fptr, " %d, %d, %[^\n]", &temp.id, &temp.is_complete,
@@ -26,10 +23,7 @@ int add_task(char *text) {
 
   FILE *fptr = fopen(FILENAME, "a+");
 
-  if (fptr == NULL) {
-    perror("Error opening data file");
-    return -1;
-  }
+  check_file(fptr);
 
   int last_id = 0;
   int initial_is_complete = 0;
@@ -49,25 +43,12 @@ int add_task(char *text) {
   return 0;
 }
 
-int edit_task(int id, char *text) {
-  FILE *flist = fopen(FILENAME, "r");
+int edit_task(char *arg, char *text) {
+  FILE *flist, *ftemp;
 
-  int res = check_empty(flist);
-  if (res != 0) {
-    return res;
-  }
+  init_src_dest(&flist, &ftemp);
 
-  FILE *ftemp = fopen(TEMP_FILENAME, "w");
-  if (ftemp == NULL) {
-    perror("Error creating temporary file");
-    fclose(flist);
-    return -1;
-  }
-
-  if (id == 0) {
-    fprintf(stderr, "Error: Not a valid integer.\n");
-    return 1;
-  }
+  int id = is_valid_int(arg);
 
   td temp;
   int found = 0;
@@ -89,33 +70,17 @@ int edit_task(int id, char *text) {
   remove(FILENAME);
   rename(TEMP_FILENAME, FILENAME);
 
-  if (!found) {
-    fprintf(stderr, "Error: Task ID %d not found.\n", id);
-    return 1;
-  }
+  is_found(id, found);
 
   return 0;
 }
 
-int change_status(int id) {
-  FILE *flist = fopen(FILENAME, "r");
+int change_status(char *arg) {
+  FILE *flist, *ftemp;
 
-  int res = check_empty(flist);
-  if (res != 0) {
-    return res;
-  }
+  init_src_dest(&flist, &ftemp);
 
-  FILE *ftemp = fopen(TEMP_FILENAME, "w");
-  if (ftemp == NULL) {
-    perror("Error creating temporary file");
-    fclose(flist);
-    return -1;
-  }
-
-  if (id == 0) {
-    fprintf(stderr, "Error: Not a valid integer.\n");
-    return 1;
-  }
+  int id = is_valid_int(arg);
 
   td temp;
   int found = 0;
@@ -139,33 +104,17 @@ int change_status(int id) {
   remove(FILENAME);
   rename(TEMP_FILENAME, FILENAME);
 
-  if (!found) {
-    fprintf(stderr, "Error: Task ID %d not found.\n", id);
-    return 1;
-  }
+  is_found(id, found);
 
   return 0;
 }
 
-int remove_task(int id) {
-  FILE *flist = fopen(FILENAME, "r");
+int remove_task(char *arg) {
+  FILE *flist, *ftemp;
 
-  int res = check_empty(flist);
-  if (res != 0) {
-    return res;
-  }
+  init_src_dest(&flist, &ftemp);
 
-  FILE *ftemp = fopen(TEMP_FILENAME, "w");
-  if (ftemp == NULL) {
-    perror("Error creating temporary file");
-    fclose(flist);
-    return -1;
-  }
-
-  if (id == 0) {
-    fprintf(stderr, "Error: Not a valid integer.\n");
-    return 1;
-  }
+  int id = is_valid_int(arg);
 
   td temp;
   int found = 0;
@@ -186,10 +135,7 @@ int remove_task(int id) {
   remove(FILENAME);
   rename(TEMP_FILENAME, FILENAME);
 
-  if (!found) {
-    fprintf(stderr, "Error: Task ID %d not found.\n", id);
-    return 1;
-  }
+  is_found(id, found);
 
   return 0;
 }
