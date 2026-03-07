@@ -7,6 +7,7 @@ int list_tasks(void) {
   FILE *fptr = fopen(FILENAME, "r");
 
   check_file(fptr);
+  is_empty(fptr);
 
   td temp;
   while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,

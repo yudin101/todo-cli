@@ -5,13 +5,6 @@
 
 #include "todo.h"
 
-long get_file_size(FILE *fptr) {
-  fseek(fptr, 0, SEEK_END);
-  long size = ftell(fptr);
-  fseek(fptr, 0, SEEK_SET);
-  return size;
-}
-
 int check_file(FILE *fptr) {
   if (fptr == NULL) {
     if (errno == ENOENT) {
@@ -26,14 +19,24 @@ int check_file(FILE *fptr) {
   return 0;
 }
 
+int is_empty(FILE *fptr) {
+  fseek(fptr, 0, SEEK_END);
+  long size = ftell(fptr);
+  fseek(fptr, 0, SEEK_SET);
+
+  if (size == 0) {
+    fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
+    exit(0);
+  }
+
+  return 0;
+}
+
 int init_src_dest(FILE **src, FILE **dest) {
   *src = fopen(FILENAME, "r");
   check_file(*src);
 
-  if (get_file_size(*src) == 0) {
-    fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
-    exit(0);
-  }
+  is_empty(*src);
 
   *dest = fopen(TEMP_FILENAME, "w");
 

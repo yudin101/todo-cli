@@ -28,5 +28,6 @@ int init_src_dest(FILE **src, FILE **dest);
 int is_valid_int(char *arg);
 int is_found(int id, int found);
 int check_text_limit(char *text);
+int is_empty(FILE *fptr);
 
 #endif
