@@ -21,7 +21,10 @@ utils.o: utils.c todo.h
 $(TARGET): main.o todo.o utils.o
 	$(CC) $(CFLAGS) -o $(TARGET) main.o todo.o utils.o
 
-.PHONY: install uninstall purge clean
+.PHONY: clean install uninstall purge
+
+clean:
+	rm -r *.o $(TARGET)
 
 install:
 	mkdir -p $(BIN)
@@ -31,8 +34,6 @@ install:
 uninstall:
 	rm -r $(BIN)/$(TARGET)
 
-purge: uninstall
+purge: clean uninstall
 	rm -rf $(DATA_DIR)
 
-clean:
-	rm -r *.o $(TARGET)

@@ -31,7 +31,7 @@ todo help
 |-------|------|
 |make clean|Remove object files and compiled binary from source directory|
 |make uninstall|Remove binary from `~/.local/bin`|
-|make purge|Uninstall, also remove data|
+|make purge|`clean`, `uninstall`, also remove data|
 
 ## Contributing
 
