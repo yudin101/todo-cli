@@ -12,16 +12,26 @@ git clone https://github.com/yudin101/todo-cli.git
 cd todo-cli
 ```
 
-**Build executable**
+## Installation
+To build and install `todo` in `~/.local/bin`
+
 ```bash
-make todo
+make
+make install
 ```
 
-**Find help**
+## Usage
 ```bash
-./todo help
+todo help
 ```
 
+## Removal
+
+|Command|Action|
+|-------|------|
+|make clean|Remove object files and compiled binary from source directory|
+|make uninstall|Remove binary from `~/.local/bin`|
+|make purge|Uninstall, also remove data|
 
 ## Contributing
 

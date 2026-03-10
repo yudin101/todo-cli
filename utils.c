@@ -5,6 +5,40 @@
 
 #include "todo.h"
 
+char *FILEPATH = NULL;
+char *TEMP_FILEPATH = NULL;
+
+static char *build_path(const char *home, const char *suffix) {
+  int len = snprintf(NULL, 0, "%s%s", home, suffix) + 1; // Adding 1 for \0
+
+  char *path = malloc(len);
+  if (!path) {
+    perror("Failed allocating memory");
+    exit(1);
+  }
+
+  snprintf(path, len, "%s%s", home, suffix);
+
+  return path;
+}
+
+void init_todo_filepaths() {
+  char *home = getenv("HOME");
+
+  if (!home) {
+    fprintf(stderr, "Error: Could not find HOME environment variable.\n");
+    exit(1);
+  } 
+
+  FILEPATH = build_path(home, "/.local/share/todo/list.txt");
+  TEMP_FILEPATH = build_path(home, "/.local/share/todo/temp.txt");
+
+  // Create the directory if it does not exist
+  char mkdir_cmd[1024];
+  snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p %s/.local/share/todo", home);
+  system(mkdir_cmd);
+}
+
 int check_file(FILE *fptr) {
   if (fptr == NULL) {
     if (errno == ENOENT) {
@@ -33,12 +67,12 @@ int is_empty(FILE *fptr) {
 }
 
 int init_src_dest(FILE **src, FILE **dest) {
-  *src = fopen(FILENAME, "r");
+  *src = fopen(FILEPATH, "r");
   check_file(*src);
 
   is_empty(*src);
 
-  *dest = fopen(TEMP_FILENAME, "w");
+  *dest = fopen(TEMP_FILEPATH, "w");
 
   if (*dest == NULL) {
     perror("Error creating temporary file");

@@ -3,8 +3,11 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 TARGET = todo
 
-$(TARGET): main.o todo.o utils.o
-	$(CC) $(CFLAGS) -o $(TARGET) main.o todo.o utils.o
+PREFIX = $(HOME)/.local
+BIN = $(PREFIX)/bin
+DATA_DIR = $(PREFIX)/share/todo
+
+all: $(TARGET)
 
 main.o: main.c todo.h
 	$(CC) $(CFLAGS) -c main.c
@@ -15,6 +18,21 @@ todo.o: todo.c todo.h
 utils.o: utils.c todo.h
 	$(CC) $(CFLAGS) -c utils.c
 
-.PHONY: clean
+$(TARGET): main.o todo.o utils.o
+	$(CC) $(CFLAGS) -o $(TARGET) main.o todo.o utils.o
+
+.PHONY: install uninstall purge clean
+
+install:
+	mkdir -p $(BIN)
+	mkdir -p $(DATA_DIR)
+	cp $(TARGET) $(BIN)
+
+uninstall:
+	rm -r $(BIN)/$(TARGET)
+
+purge: uninstall
+	rm -rf $(DATA_DIR)
+
 clean:
-	rm -rf *.o $(TARGET)
+	rm -r *.o $(TARGET)

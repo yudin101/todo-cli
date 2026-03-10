@@ -3,10 +3,10 @@
 
 #include <stdio.h>
 
-#define FILENAME "list.txt"
-#define TEMP_FILENAME "temp.txt"
-
 #define MAX_TEXT 256
+
+extern char *FILEPATH;
+extern char *TEMP_FILEPATH;
 
 typedef struct Todo {
   int id;
@@ -23,6 +23,7 @@ int remove_task(char *arg);
 void print_help(FILE *stream);
 
 // utils.c
+void init_todo_filepaths();
 int check_file(FILE *fptr);
 int init_src_dest(FILE **src, FILE **dest);
 int is_valid_int(char *arg);
