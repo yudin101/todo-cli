@@ -24,7 +24,7 @@ $(TARGET): main.o todo.o utils.o
 .PHONY: clean install uninstall purge
 
 clean:
-	-rm -r *.o $(TARGET)
+	rm -f *.o $(TARGET)
 
 install:
 	mkdir -p $(BIN)
@@ -32,7 +32,7 @@ install:
 	cp $(TARGET) $(BIN)
 
 uninstall:
-	-rm -r $(BIN)/$(TARGET)
+	rm -f $(BIN)/$(TARGET)
 
 purge: clean uninstall
 	rm -rf $(DATA_DIR)
