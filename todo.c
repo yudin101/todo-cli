@@ -4,7 +4,7 @@
 #include "todo.h"
 
 int list_tasks(void) {
-  FILE *fptr = fopen(FILENAME, "r");
+  FILE *fptr = fopen(FILEPATH, "r");
 
   check_file(fptr);
   is_empty(fptr);
@@ -20,9 +20,9 @@ int list_tasks(void) {
 }
 
 int add_task(char *text) {
-  int exists = access(FILENAME, F_OK);
+  int exists = access(FILEPATH, F_OK);
 
-  FILE *fptr = fopen(FILENAME, "a+");
+  FILE *fptr = fopen(FILEPATH, "a+");
 
   check_file(fptr);
 
@@ -71,8 +71,8 @@ int edit_task(char *arg, char *text) {
   fclose(flist);
   fclose(ftemp);
 
-  remove(FILENAME);
-  rename(TEMP_FILENAME, FILENAME);
+  remove(FILEPATH);
+  rename(TEMP_FILEPATH, FILEPATH);
 
   is_found(id, found);
 
@@ -105,8 +105,8 @@ int change_status(char *arg) {
   fclose(flist);
   fclose(ftemp);
 
-  remove(FILENAME);
-  rename(TEMP_FILENAME, FILENAME);
+  remove(FILEPATH);
+  rename(TEMP_FILEPATH, FILEPATH);
 
   is_found(id, found);
 
@@ -136,8 +136,8 @@ int remove_task(char *arg) {
   fclose(flist);
   fclose(ftemp);
 
-  remove(FILENAME);
-  rename(TEMP_FILENAME, FILENAME);
+  remove(FILEPATH);
+  rename(TEMP_FILEPATH, FILEPATH);
 
   is_found(id, found);
 
