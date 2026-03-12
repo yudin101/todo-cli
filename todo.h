@@ -31,4 +31,7 @@ int is_found(int id, int found);
 int check_text_limit(char *text);
 int is_empty(FILE *fptr);
 
+// test.c
+int test_add_task(void);
+
 #endif
