@@ -17,9 +17,9 @@ typedef struct Todo {
 // todo.c
 int list_tasks(void);
 int add_task(char *text);
-int edit_task(char *arg, char *text);
-int change_status(char *arg);
-int remove_task(char *arg);
+int edit_task(char *id_arg, char *text);
+int change_status(char *id_arg);
+int remove_task(char *id_arg);
 void print_help(FILE *stream);
 
 // utils.c

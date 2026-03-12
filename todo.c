@@ -46,8 +46,8 @@ int add_task(char *text) {
   return 0;
 }
 
-int edit_task(char *arg, char *text) {
-  int id = is_valid_int(arg);
+int edit_task(char *id_arg, char *text) {
+  int id = is_valid_int(id_arg);
   check_text_limit(text);
 
   FILE *flist, *ftemp;
@@ -79,12 +79,12 @@ int edit_task(char *arg, char *text) {
   return 0;
 }
 
-int change_status(char *arg) {
+int change_status(char *id_arg) {
   FILE *flist, *ftemp;
 
   init_src_dest(&flist, &ftemp);
 
-  int id = is_valid_int(arg);
+  int id = is_valid_int(id_arg);
 
   td temp;
   int found = 0;
@@ -113,12 +113,12 @@ int change_status(char *arg) {
   return 0;
 }
 
-int remove_task(char *arg) {
+int remove_task(char *id_arg) {
   FILE *flist, *ftemp;
 
   init_src_dest(&flist, &ftemp);
 
-  int id = is_valid_int(arg);
+  int id = is_valid_int(id_arg);
 
   td temp;
   int found = 0;
