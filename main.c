@@ -55,6 +55,11 @@ int main(int argc, char *argv[]) {
     if (remove_task(argv[2]) == 0) {
       list_tasks();
     }
+  } else if (strcmp(argv[1], "rmcmp") == 0) {
+    // Remove completed task
+    if (remove_cmp_task() == 0) {
+      list_tasks();
+    }
   } else if (strcmp(argv[1], "help") == 0) {
     // Print help
     print_help(stdout);

@@ -20,18 +20,16 @@ int add_task(char *text);
 int edit_task(char *id_arg, char *text);
 int change_status(char *id_arg);
 int remove_task(char *id_arg);
+int remove_cmp_task(void);
 void print_help(FILE *stream);
 
 // utils.c
-int init_todo_filepaths();
+int init_todo_filepaths(void);
 int check_file(FILE *fptr);
 int init_src_dest(FILE **src, FILE **dest);
 int is_valid_int(char *arg);
 int is_found(int id, int found);
 int check_text_limit(char *text);
 int is_empty(FILE *fptr);
-
-// test.c
-int test_add_task(void);
 
 #endif

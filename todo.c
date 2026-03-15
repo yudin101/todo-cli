@@ -177,6 +177,31 @@ int remove_task(char *id_arg) {
   return 0;
 }
 
+int remove_cmp_task(void) {
+  FILE *flist, *ftemp;
+
+  if (init_src_dest(&flist, &ftemp) != 0) {
+    return 1;
+  }
+
+  td temp;
+
+  while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+                temp.text) == 3) {
+    if (temp.is_complete == 0) {
+      fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
+    }
+  }
+
+  fclose(flist);
+  fclose(ftemp);
+
+  remove(FILEPATH);
+  rename(TEMP_FILEPATH, FILEPATH);
+
+  return 0;
+}
+
 void print_help(FILE *stream) {
   fprintf(stream, "Usage:  todo COMMAND\n");
   fprintf(stream, "Todo CLI - A simple task manager\n\n");
