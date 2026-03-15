@@ -31,7 +31,8 @@ test_runner: todo.o utils.o test.o
 .PHONY: clean install uninstall purge test
 
 test: test_runner
-	@./$(TEST_RUNNER)
+	@./$(TEST_RUNNER) > /dev/null 2>&1 || (./$(TEST_RUNNER) && exit 1)
+	@echo "All Tests Passed!"
 
 clean:
 	rm -f *.o $(TARGET) $(TEST_RUNNER)

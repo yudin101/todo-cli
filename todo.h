@@ -23,7 +23,7 @@ int remove_task(char *id_arg);
 void print_help(FILE *stream);
 
 // utils.c
-void init_todo_filepaths();
+int init_todo_filepaths();
 int check_file(FILE *fptr);
 int init_src_dest(FILE **src, FILE **dest);
 int is_valid_int(char *arg);

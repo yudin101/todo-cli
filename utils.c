@@ -22,13 +22,13 @@ static char *build_path(const char *home, const char *suffix) {
   return path;
 }
 
-void init_todo_filepaths() {
+int init_todo_filepaths() {
   char *home = getenv("HOME");
 
   if (!home) {
     fprintf(stderr, "Error: Could not find HOME environment variable.\n");
-    exit(1);
-  } 
+    return 1;
+  }
 
   FILEPATH = build_path(home, "/.local/share/todo/list.txt");
   TEMP_FILEPATH = build_path(home, "/.local/share/todo/temp.txt");
@@ -37,16 +37,18 @@ void init_todo_filepaths() {
   char mkdir_cmd[1024];
   snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p %s/.local/share/todo", home);
   system(mkdir_cmd);
+
+  return 0;
 }
 
 int check_file(FILE *fptr) {
   if (fptr == NULL) {
     if (errno == ENOENT) {
       fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
-      exit(0);
+      return 1;
     } else {
       perror("Error opening data file");
-      exit(1);
+      return 1;
     }
   }
 
@@ -60,7 +62,7 @@ int is_empty(FILE *fptr) {
 
   if (size == 0) {
     fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
-    exit(0);
+    return 1;
   }
 
   return 0;
@@ -68,16 +70,21 @@ int is_empty(FILE *fptr) {
 
 int init_src_dest(FILE **src, FILE **dest) {
   *src = fopen(FILEPATH, "r");
-  check_file(*src);
 
-  is_empty(*src);
+  if (check_file(*src) != 0) {
+    return 1;
+  }
+
+  if (is_empty(*src) != 0) {
+    return 1;
+  }
 
   *dest = fopen(TEMP_FILEPATH, "w");
 
   if (*dest == NULL) {
     perror("Error creating temporary file");
     fclose(*src);
-    exit(1);
+    return 1;
   }
 
   return 0;
@@ -87,7 +94,7 @@ int is_valid_int(char *arg) {
   int id = atoi(arg);
   if (id == 0 && arg[0] != '0') {
     fprintf(stderr, "Error: '%s' is not a valid ID.\n", arg);
-    exit(1);
+    return (-1);
   }
 
   return id;
@@ -96,7 +103,7 @@ int is_valid_int(char *arg) {
 int is_found(int id, int found) {
   if (!found) {
     fprintf(stderr, "Error: Task ID %d not found.\n", id);
-    exit(1);
+    return 1;
   }
 
   return 0;
@@ -105,7 +112,7 @@ int is_found(int id, int found) {
 int check_text_limit(char *text) {
   if (strlen(text) >= MAX_TEXT) {
     fprintf(stderr, "Error: Task too long. Max %d characters.\n", MAX_TEXT - 1);
-    exit(1);
+    return 1;
   }
 
   return 0;
