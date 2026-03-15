@@ -22,7 +22,7 @@ static char *build_path(const char *home, const char *suffix) {
   return path;
 }
 
-int init_todo_filepaths() {
+int init_todo_filepaths(void) {
   char *home = getenv("HOME");
 
   if (!home) {

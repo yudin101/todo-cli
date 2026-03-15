@@ -16,6 +16,8 @@ int file_contains(char *expected_str) {
     }
   }
 
+  fclose(fptr);
+
   return 1;
 }
 
@@ -31,6 +33,8 @@ int check_status(int id, int expected_status) {
     }
   }
 
+  fclose(fptr);
+
   return 1;
 }
 
@@ -45,14 +49,24 @@ int main(void) {
   assert(change_status("3") == 1);
 
   // Normal use
+  // Add task
   assert(add_task("First Test Task") == 0);
   assert(file_contains("First Test Task") == 0);
 
+  // Edit task
   assert(edit_task("1", "Edited first task") == 0);
   assert(file_contains("Edited first task") == 0);
 
-  assert(change_status("1") == 0);
-  assert(check_status(1, 1) == 0);
+  // Add second task
+  assert(add_task("Second Test Task") == 0);
+  assert(file_contains("Second Test Task") == 0);
+
+  // Change status of task #2
+  assert(change_status("2") == 0);
+  assert(check_status(2, 1) == 0);
+
+  assert(remove_cmp_task() == 0);
+  assert(file_contains("Second Test Task") == 1);
 
   // Non existent tasks
   assert(edit_task("3", "Any text") == 1);
