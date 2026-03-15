@@ -211,5 +211,6 @@ void print_help(FILE *stream) {
   fprintf(stream, "  %-12s Edit existing task by ID\n", "edt");
   fprintf(stream, "  %-12s Toggle task completion by ID\n", "cmp");
   fprintf(stream, "  %-12s Remove a task by ID\n", "rm");
+  fprintf(stream, "  %-12s Remove completed tasks\n", "rmcmp");
   fprintf(stream, "  %-12s Show this menu\n", "help");
 }
