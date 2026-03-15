@@ -4,7 +4,9 @@
 #include "todo.h"
 
 int main(int argc, char *argv[]) {
-  init_todo_filepaths();
+  if (init_todo_filepaths() != 0) {
+    return 1;
+  }
 
   if (argc < 2) {
     print_help(stderr);

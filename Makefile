@@ -2,6 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
 
 TARGET = todo
+TEST_RUNNER = test
 
 PREFIX = $(HOME)/.local
 BIN = $(PREFIX)/bin
@@ -18,13 +19,23 @@ todo.o: todo.c todo.h
 utils.o: utils.c todo.h
 	$(CC) $(CFLAGS) -c utils.c
 
+test.o: test.c todo.h
+	$(CC) $(CFLAGS) -c test.c
+
 $(TARGET): main.o todo.o utils.o
 	$(CC) $(CFLAGS) -o $(TARGET) main.o todo.o utils.o
 
-.PHONY: clean install uninstall purge
+test_runner: todo.o utils.o test.o
+	$(CC) $(CFLAGS) -o $(TEST_RUNNER) todo.o utils.o test.o
+
+.PHONY: clean install uninstall purge test
+
+test: test_runner
+	@./$(TEST_RUNNER) > /dev/null 2>&1 || (./$(TEST_RUNNER) && exit 1)
+	@echo "All Tests Passed!"
 
 clean:
-	rm -f *.o $(TARGET)
+	rm -f *.o $(TARGET) $(TEST_RUNNER)
 
 install:
 	mkdir -p $(BIN)

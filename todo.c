@@ -6,8 +6,13 @@
 int list_tasks(void) {
   FILE *fptr = fopen(FILEPATH, "r");
 
-  check_file(fptr);
-  is_empty(fptr);
+  if (check_file(fptr) != 0) {
+    return 1;
+  }
+
+  if (is_empty(fptr) != 0) {
+    return 1;
+  }
 
   td temp;
   while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
@@ -24,9 +29,13 @@ int add_task(char *text) {
 
   FILE *fptr = fopen(FILEPATH, "a+");
 
-  check_file(fptr);
+  if (check_file(fptr) != 0) {
+    return 1;
+  }
 
-  check_text_limit(text);
+  if (check_text_limit(text) != 0) {
+    return 1;
+  }
 
   int last_id = 0;
   int initial_is_complete = 0;
@@ -48,11 +57,19 @@ int add_task(char *text) {
 
 int edit_task(char *id_arg, char *text) {
   int id = is_valid_int(id_arg);
-  check_text_limit(text);
+  if (id < 0) {
+    return 1;
+  }
+
+  if (check_text_limit(text) != 0) {
+    return 1;
+  }
 
   FILE *flist, *ftemp;
 
-  init_src_dest(&flist, &ftemp);
+  if (init_src_dest(&flist, &ftemp) != 0) {
+    return 1;
+  }
 
   td temp;
   int found = 0;
@@ -74,7 +91,9 @@ int edit_task(char *id_arg, char *text) {
   remove(FILEPATH);
   rename(TEMP_FILEPATH, FILEPATH);
 
-  is_found(id, found);
+  if (is_found(id, found) != 0) {
+    return 1;
+  }
 
   return 0;
 }
@@ -82,9 +101,14 @@ int edit_task(char *id_arg, char *text) {
 int change_status(char *id_arg) {
   FILE *flist, *ftemp;
 
-  init_src_dest(&flist, &ftemp);
+  if (init_src_dest(&flist, &ftemp) != 0) {
+    return 1;
+  }
 
   int id = is_valid_int(id_arg);
+  if (id < 0) {
+    return 1;
+  }
 
   td temp;
   int found = 0;
@@ -108,7 +132,9 @@ int change_status(char *id_arg) {
   remove(FILEPATH);
   rename(TEMP_FILEPATH, FILEPATH);
 
-  is_found(id, found);
+  if (is_found(id, found) != 0) {
+    return 1;
+  }
 
   return 0;
 }
@@ -116,9 +142,14 @@ int change_status(char *id_arg) {
 int remove_task(char *id_arg) {
   FILE *flist, *ftemp;
 
-  init_src_dest(&flist, &ftemp);
+  if (init_src_dest(&flist, &ftemp) != 0) {
+    return 1;
+  }
 
   int id = is_valid_int(id_arg);
+  if (id < 0) {
+    return 1;
+  }
 
   td temp;
   int found = 0;
@@ -139,7 +170,9 @@ int remove_task(char *id_arg) {
   remove(FILEPATH);
   rename(TEMP_FILEPATH, FILEPATH);
 
-  is_found(id, found);
+  if (is_found(id, found) != 0) {
+    return 1;
+  }
 
   return 0;
 }
