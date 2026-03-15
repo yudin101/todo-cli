@@ -1,6 +1,38 @@
 #include <assert.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "todo.h"
+
+int file_contains(char *expected_str) {
+  FILE *fptr = fopen(FILEPATH, "r");
+
+  td temp;
+
+  while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+                temp.text) == 3) {
+    if (strcmp(temp.text, expected_str) == 0) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
+int check_status(int id, int expected_status) {
+  FILE *fptr = fopen(FILEPATH, "r");
+
+  td temp;
+
+  while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+                temp.text) == 3) {
+    if (temp.id == id && temp.is_complete == expected_status) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
 
 int main(void) {
   if (init_todo_filepaths() != 0) {
@@ -14,8 +46,13 @@ int main(void) {
 
   // Normal use
   assert(add_task("First Test Task") == 0);
+  assert(file_contains("First Test Task") == 0);
+
   assert(edit_task("1", "Edited first task") == 0);
+  assert(file_contains("Edited first task") == 0);
+
   assert(change_status("1") == 0);
+  assert(check_status(1, 1) == 0);
 
   // Non existent tasks
   assert(edit_task("3", "Any text") == 1);
@@ -24,6 +61,7 @@ int main(void) {
 
   // Clean
   assert(remove_task("1") == 0);
+  assert(file_contains("First Test Task") == 1);
 
   return 0;
 }
