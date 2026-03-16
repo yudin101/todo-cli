@@ -24,7 +24,7 @@ int remove_cmp_task(void);
 void print_help(FILE *stream);
 
 // utils.c
-int init_todo_filepaths(void);
+int init_todo_filepaths(char *env);
 int check_file(FILE *fptr);
 int init_src_dest(FILE **src, FILE **dest);
 int is_valid_int(char *arg);

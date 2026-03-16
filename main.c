@@ -4,7 +4,7 @@
 #include "todo.h"
 
 int main(int argc, char *argv[]) {
-  if (init_todo_filepaths() != 0) {
+  if (init_todo_filepaths("prod") != 0) {
     return 1;
   }
 

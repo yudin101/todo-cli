@@ -22,23 +22,40 @@ static char *build_path(const char *home, const char *suffix) {
   return path;
 }
 
-int init_todo_filepaths(void) {
-  char *home = getenv("HOME");
+int init_todo_filepaths(char *env) {
+  char mkdir_cmd[1024];
 
-  if (!home) {
-    fprintf(stderr, "Error: Could not find HOME environment variable.\n");
+  if (strcmp(env, "test") == 0) {
+    FILEPATH = "/tmp/todo/list.txt";
+    TEMP_FILEPATH = "/tmp/todo/temp.txt";
+
+    // Create the directory if it does not exist
+    snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p /tmp/todo");
+    system(mkdir_cmd);
+
+    return 0;
+  } else if (strcmp(env, "prod") == 0) {
+
+    char *home = getenv("HOME");
+
+    if (!home) {
+      fprintf(stderr, "Error: Could not find HOME environment variable.\n");
+      return 1;
+    }
+
+    FILEPATH = build_path(home, "/.local/share/todo/list.txt");
+    TEMP_FILEPATH = build_path(home, "/.local/share/todo/temp.txt");
+
+    // Create the directory if it does not exist
+    snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p %s/.local/share/todo",
+             home);
+    system(mkdir_cmd);
+
+    return 0;
+  } else {
+    fprintf(stderr, "Error: Invalid argument in init_todo_filepaths.\n");
     return 1;
   }
-
-  FILEPATH = build_path(home, "/.local/share/todo/list.txt");
-  TEMP_FILEPATH = build_path(home, "/.local/share/todo/temp.txt");
-
-  // Create the directory if it does not exist
-  char mkdir_cmd[1024];
-  snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p %s/.local/share/todo", home);
-  system(mkdir_cmd);
-
-  return 0;
 }
 
 int check_file(FILE *fptr) {

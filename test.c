@@ -39,7 +39,7 @@ int check_status(int id, int expected_status) {
 }
 
 int main(void) {
-  if (init_todo_filepaths() != 0) {
+  if (init_todo_filepaths("test") != 0) {
     return 1;
   }
 
