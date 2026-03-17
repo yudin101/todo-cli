@@ -4,7 +4,7 @@
 
 #include "todo.h"
 
-int file_contains(char *expected_str) {
+static int file_contains(char *expected_str) {
   FILE *fptr = fopen(FILEPATH, "r");
 
   td temp;
@@ -21,7 +21,7 @@ int file_contains(char *expected_str) {
   return 1;
 }
 
-int check_status(int id, int expected_status) {
+static int check_status(int id, int expected_status) {
   FILE *fptr = fopen(FILEPATH, "r");
 
   td temp;
