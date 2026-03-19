@@ -5,6 +5,11 @@
 
 #define MAX_TEXT 256
 
+#define RED "\033[1;31m" // Bold Red
+#define GRN "\033[0;32m"
+#define YLW "\033[0;33m"
+#define RST "\033[0m"
+
 extern char *FILEPATH;
 extern char *TEMP_FILEPATH;
 
@@ -31,5 +36,7 @@ int is_valid_int(char *arg);
 int is_found(int id, int found);
 int check_text_limit(char *text);
 int is_empty(FILE *fptr);
+void log_error(char *fmt, ...);
+void sys_error(char *msg);
 
 #endif

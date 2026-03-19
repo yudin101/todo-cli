@@ -1,7 +1,9 @@
 #include <errno.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "todo.h"
 
@@ -13,7 +15,7 @@ static char *build_path(const char *home, const char *suffix) {
 
   char *path = malloc(len);
   if (!path) {
-    perror("Failed allocating memory");
+    sys_error("Failed allocating memory");
     exit(1);
   }
 
@@ -39,7 +41,7 @@ int init_todo_filepaths(char *env) {
     char *home = getenv("HOME");
 
     if (!home) {
-      fprintf(stderr, "Error: Could not find HOME environment variable.\n");
+      log_error("Could not find HOME environment variable.");
       return 1;
     }
 
@@ -53,7 +55,7 @@ int init_todo_filepaths(char *env) {
 
     return 0;
   } else {
-    fprintf(stderr, "Error: Invalid argument in init_todo_filepaths.\n");
+    log_error("Invalid argument in init_todo_filepaths.");
     return 1;
   }
 }
@@ -64,7 +66,7 @@ int check_file(FILE *fptr) {
       fprintf(stdout, "Empty! Use 'todo add' to add tasks.\n");
       return 1;
     } else {
-      perror("Error opening data file");
+      sys_error("Error opening data file");
       return 1;
     }
   }
@@ -99,7 +101,7 @@ int init_src_dest(FILE **src, FILE **dest) {
   *dest = fopen(TEMP_FILEPATH, "w");
 
   if (*dest == NULL) {
-    perror("Error creating temporary file");
+    sys_error("Error creating temporary file");
     fclose(*src);
     return 1;
   }
@@ -110,7 +112,7 @@ int init_src_dest(FILE **src, FILE **dest) {
 int is_valid_int(char *arg) {
   int id = atoi(arg);
   if (id == 0 && arg[0] != '0') {
-    fprintf(stderr, "Error: '%s' is not a valid ID.\n", arg);
+    log_error("'%s' is not a valid ID.", arg);
     return (-1);
   }
 
@@ -119,7 +121,7 @@ int is_valid_int(char *arg) {
 
 int is_found(int id, int found) {
   if (!found) {
-    fprintf(stderr, "Error: Task ID %d not found.\n", id);
+    log_error("Task ID %d not found.", id);
     return 1;
   }
 
@@ -128,9 +130,33 @@ int is_found(int id, int found) {
 
 int check_text_limit(char *text) {
   if (strlen(text) >= MAX_TEXT) {
-    fprintf(stderr, "Error: Task too long. Max %d characters.\n", MAX_TEXT - 1);
+    log_error("Task too long. Max %d characters.", MAX_TEXT - 1);
     return 1;
   }
 
   return 0;
+}
+
+void log_error(char *fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+
+  if (isatty(STDOUT_FILENO)) {
+    fprintf(stderr, RED "Error: " RST);
+  } else {
+    fprintf(stderr, "Error: ");
+  }
+
+  vfprintf(stderr, fmt, args);
+  fprintf(stderr, "\n");
+
+  va_end(args);
+}
+
+void sys_error(char *msg) {
+  if (isatty(STDOUT_FILENO)) {
+    fprintf(stderr, RED "%s: " RST "%s\n", msg, strerror(errno));
+  } else {
+    fprintf(stderr, "%s: %s\n", msg, strerror(errno));
+  }
 }

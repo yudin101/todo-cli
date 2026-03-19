@@ -14,10 +14,21 @@ int list_tasks(void) {
     return 1;
   }
 
+  int is_a_tty = isatty(STDOUT_FILENO); // Checking if the terminal supports colors
+  char *color = "";
+  char *reset = "";
+
   td temp;
   while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
-    printf("%d [%c] %s\n", temp.id, temp.is_complete ? 'X' : ' ', temp.text);
+
+    if (is_a_tty) {
+      color = temp.is_complete ? GRN : YLW;
+      reset = RST;
+    }
+
+    fprintf(stdout, "%s%d [%c] %s%s\n", color, temp.id,
+            temp.is_complete ? 'X' : ' ', temp.text, reset);
   }
 
   fclose(fptr);
