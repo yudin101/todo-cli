@@ -14,7 +14,8 @@ int list_tasks(void) {
     return 1;
   }
 
-  int is_a_tty = isatty(STDOUT_FILENO); // Checking if the terminal supports colors
+  int is_a_tty =
+      isatty(STDOUT_FILENO); // Checking if the terminal supports colors
   char *color = "";
   char *reset = "";
 
@@ -164,6 +165,7 @@ int remove_task(char *id_arg) {
 
   td temp;
   int found = 0;
+  int i = 0;
 
   while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
@@ -172,7 +174,8 @@ int remove_task(char *id_arg) {
       continue; // Skip the task we want to delete
     }
 
-    fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
+    fprintf(ftemp, "%d, %d, %s\n", i + 1, temp.is_complete, temp.text);
+    i++;
   }
 
   fclose(flist);
@@ -196,11 +199,13 @@ int remove_cmp_task(void) {
   }
 
   td temp;
+  int i = 0;
 
   while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.is_complete == 0) {
-      fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
+      fprintf(ftemp, "%d, %d, %s\n", i + 1, temp.is_complete, temp.text);
+      i++;
     }
   }
 
