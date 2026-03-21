@@ -8,6 +8,7 @@ PREFIX = $(HOME)/.local
 BIN = $(PREFIX)/bin
 DATA_DIR = $(PREFIX)/share/todo
 TEMP_DIR = /tmp/todo
+TEST_LOG = test.log
 
 all: $(TARGET)
 
@@ -33,8 +34,18 @@ test_runner: todo.o utils.o test.o
 
 test: test_runner
 	@mkdir -p $(TEMP_DIR)
-	@bash -c 'trap "rm -rf $(TEMP_DIR)" EXIT; \
-	./$(TEST_RUNNER) > /dev/null 2>&1 || (./$(TEST_RUNNER) && exit 1)'
+	@bash -c 'cleanup() { rm -rf $(TEMP_DIR); }; \
+	./$(TEST_RUNNER) > test.log 2>&1; \
+	status=$$?; \
+	if [ $$status -eq 0 ]; then \
+		cleanup; \
+		rm -f $(TEST_LOG); \
+	else \
+		echo "Tests failed (exit $$status). Output:"; \
+		cat $(TEST_LOG); \
+		echo "Temp dir kept at $(TEMP_DIR)"; \
+		exit 1; \
+	fi'
 	@echo "All Tests Passed!"
 
 clean:
