@@ -64,6 +64,7 @@ int main(void) {
   assert(edit_task("3", "Any text") == 1);
   assert(remove_task("2") == 1);
   assert(change_status("3") == 1);
+  assert(swap_tasks("3", "2") == 1);
 
   // Normal use
   // Add task
@@ -94,10 +95,18 @@ int main(void) {
   assert(add_task("Fourth Test Task") == 0);
   assert(check_text(3, "Fourth Test Task") == 0); // New numbering should start with 3
 
+  // Check Swap
+  assert(swap_tasks("3", "2") == 0);
+  assert(swap_tasks("8", "2") == 1);
+  assert(swap_tasks("3", "8") == 1);
+  assert(check_text(2, "Fourth Test Task") == 0);
+  assert(check_text(3, "Third Test Task") == 0);
+
   // Non existent tasks
   assert(edit_task("5", "Any text") == 1);
   assert(remove_task("4") == 1);
   assert(change_status("6") == 1);
+  assert(swap_tasks("7", "8") == 1);
 
   // Clean Up
   assert(remove_task("3") == 0);

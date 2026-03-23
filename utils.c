@@ -111,7 +111,7 @@ int init_src_dest(FILE **src, FILE **dest) {
 
 int is_valid_int(char *arg) {
   int id = atoi(arg);
-  if (id == 0 && arg[0] != '0') {
+  if (id <= 0 && arg[0] != '0') {
     log_error("'%s' is not a valid ID.", arg);
     return (-1);
   }

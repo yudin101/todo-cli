@@ -23,6 +23,7 @@ typedef struct Todo {
 int list_tasks(void);
 int add_task(char *text);
 int edit_task(char *id_arg, char *text);
+int swap_tasks(char *id_1_arg, char *id_2_arg);
 int change_status(char *id_arg);
 int remove_task(char *id_arg);
 int remove_cmp_task(void);

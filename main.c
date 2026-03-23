@@ -35,7 +35,16 @@ int main(int argc, char *argv[]) {
     if (edit_task(argv[2], argv[3]) == 0) {
       list_tasks();
     }
-  } else if (strcmp(argv[1], "cmp") == 0) {
+  } else if (strcmp(argv[1], "swap") == 0) {
+    if (argc < 4) {
+      fprintf(stderr, "Usage: todo swap <id> <id>\n");
+      return 1;
+    }
+
+    if (swap_tasks(argv[2], argv[3]) == 0) {
+      list_tasks();
+    }
+  }else if (strcmp(argv[1], "cmp") == 0) {
     if (argc < 3) {
       fprintf(stderr, "Usage: todo cmp <id>\n");
       return 1;

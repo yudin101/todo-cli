@@ -110,6 +110,81 @@ int edit_task(char *id_arg, char *text) {
   return 0;
 }
 
+int swap_tasks(char *id_1_arg, char *id_2_arg) {
+  FILE *flist, *ftemp;
+
+  if (init_src_dest(&flist, &ftemp) != 0) {
+    return 1;
+  }
+
+  int id_1 = is_valid_int(id_1_arg);
+  int id_2 = is_valid_int(id_2_arg);
+  if (id_1 < 0 || id_2 < 0) {
+    return 1;
+  }
+
+  td tasks[1000];
+
+  int found_1 = 0;
+  int found_2 = 0;
+
+  int count = 0;
+
+  while (fscanf(flist, " %d, %d, %255[^\n]", &tasks[count].id,
+                &tasks[count].is_complete, tasks[count].text) == 3) {
+    if (tasks[count].id == id_1) {
+      found_1 = 1;
+    } else if (tasks[count].id == id_2) {
+      found_2 = 1;
+    }
+
+    count++;
+  }
+
+  if (is_found(id_1, found_1) != 0 || is_found(id_2, found_2) != 0) {
+    fclose(flist);
+    fclose(ftemp);
+    remove(TEMP_FILEPATH);
+    return 1;
+  }
+
+  int task_1_idx;
+  int task_2_idx;
+
+  for (int i = 0; i < count; i++) {
+    if (tasks[i].id == id_1)
+      task_1_idx = i;
+    if (tasks[i].id == id_2)
+      task_2_idx = i;
+  }
+
+  td temp;
+  temp = tasks[task_1_idx];
+  tasks[task_1_idx] = tasks[task_2_idx];
+  tasks[task_2_idx] = temp;
+
+  for (int i = 0; i < count; i++) {
+    if (tasks[i].id == id_1) {
+      fprintf(ftemp, "%d, %d, %s\n", id_2, tasks[i].is_complete, tasks[i].text);
+      continue;
+    } else if (tasks[i].id == id_2) {
+      fprintf(ftemp, "%d, %d, %s\n", id_1, tasks[i].is_complete, tasks[i].text);
+      continue;
+    }
+
+    fprintf(ftemp, "%d, %d, %s\n", tasks[i].id, tasks[i].is_complete,
+            tasks[i].text);
+  }
+
+  fclose(flist);
+  fclose(ftemp);
+
+  remove(FILEPATH);
+  rename(TEMP_FILEPATH, FILEPATH);
+
+  return 0;
+}
+
 int change_status(char *id_arg) {
   FILE *flist, *ftemp;
 
@@ -225,6 +300,7 @@ void print_help(FILE *stream) {
   fprintf(stream, "  %-12s List all tasks\n", "list");
   fprintf(stream, "  %-12s Add a new task\n", "add");
   fprintf(stream, "  %-12s Edit existing task by ID\n", "edt");
+  fprintf(stream, "  %-12s Swap two tasks by ID\n", "swap");
   fprintf(stream, "  %-12s Toggle task completion by ID\n", "cmp");
   fprintf(stream, "  %-12s Remove a task by ID\n", "rm");
   fprintf(stream, "  %-12s Remove completed tasks\n", "rmcmp");
