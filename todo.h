@@ -1,4 +1,5 @@
-#ifndef TODO_H
+#pragma once
+
 #define TODO_H
 
 #include <stdio.h>
@@ -39,5 +40,3 @@ int check_text_limit(char *text);
 int is_empty(FILE *fptr);
 void log_error(char *fmt, ...);
 void sys_error(char *msg);
-
-#endif
