@@ -297,10 +297,10 @@ void print_help(FILE *stream) {
   fprintf(stream, "Usage:  todo COMMAND\n");
   fprintf(stream, "Todo CLI - A simple task manager\n\n");
   fprintf(stream, "Commands:\n");
-  fprintf(stream, "  %-12s List all tasks\n", "list");
+  fprintf(stream, "  %-12s List all tasks\n", "ls");
   fprintf(stream, "  %-12s Add a new task\n", "add");
-  fprintf(stream, "  %-12s Edit existing task by ID\n", "edt");
-  fprintf(stream, "  %-12s Swap two tasks by ID\n", "swap");
+  fprintf(stream, "  %-12s Edit existing task by ID\n", "ed");
+  fprintf(stream, "  %-12s Swap two tasks by ID\n", "swp");
   fprintf(stream, "  %-12s Toggle task completion by ID\n", "cmp");
   fprintf(stream, "  %-12s Remove a task by ID\n", "rm");
   fprintf(stream, "  %-12s Remove completed tasks\n", "rmcmp");

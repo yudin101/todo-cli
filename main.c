@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
   if (argc < 2) {
     print_help(stderr);
     return 1;
-  } else if (strcmp(argv[1], "list") == 0) {
+  } else if (strcmp(argv[1], "ls") == 0) {
 
     // List the tasks
     list_tasks();
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     if (add_task(argv[2]) == 0) {
       list_tasks();
     }
-  } else if (strcmp(argv[1], "edt") == 0) {
+  } else if (strcmp(argv[1], "ed") == 0) {
     if (argc < 4) {
       fprintf(stderr, "Usage: todo edt <id> <text>\n");
       return 1;
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     if (edit_task(argv[2], argv[3]) == 0) {
       list_tasks();
     }
-  } else if (strcmp(argv[1], "swap") == 0) {
+  } else if (strcmp(argv[1], "swp") == 0) {
     if (argc < 4) {
       fprintf(stderr, "Usage: todo swap <id> <id>\n");
       return 1;
