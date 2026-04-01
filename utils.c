@@ -28,8 +28,8 @@ int init_todo_filepaths(char *env) {
   char mkdir_cmd[1024];
 
   if (strcmp(env, "test") == 0) {
-    FILEPATH = "/tmp/todo/list.txt";
-    TEMP_FILEPATH = "/tmp/todo/temp.txt";
+    FILEPATH = "/tmp/todo/list.csv";
+    TEMP_FILEPATH = "/tmp/todo/temp.csv";
 
     // Create the directory if it does not exist
     snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p /tmp/todo");
@@ -45,8 +45,8 @@ int init_todo_filepaths(char *env) {
       return 1;
     }
 
-    FILEPATH = build_path(home, "/.local/share/todo/list.txt");
-    TEMP_FILEPATH = build_path(home, "/.local/share/todo/temp.txt");
+    FILEPATH = build_path(home, "/.local/share/todo/list.csv");
+    TEMP_FILEPATH = build_path(home, "/.local/share/todo/temp.csv");
 
     // Create the directory if it does not exist
     snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p %s/.local/share/todo",

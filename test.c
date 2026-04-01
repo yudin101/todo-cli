@@ -9,7 +9,7 @@ static int file_contains(char *expected_str) {
 
   td temp;
 
-  while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(fptr, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (strcmp(temp.text, expected_str) == 0) {
       return 0;
@@ -26,7 +26,7 @@ static int check_status(int id, int expected_status) {
 
   td temp;
 
-  while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(fptr, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id && temp.is_complete == expected_status) {
       return 0;
@@ -43,7 +43,7 @@ static int check_text(int id, char *text) {
 
   td temp;
 
-  while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(fptr, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id && strcmp(temp.text, text) == 0) {
       return 0;

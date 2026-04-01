@@ -20,7 +20,7 @@ int list_tasks(void) {
   char *reset = "";
 
   td temp;
-  while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(fptr, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
 
     if (is_a_tty) {
@@ -54,13 +54,13 @@ int add_task(char *text) {
   td temp;
 
   if (exists == 0) {
-    while (fscanf(fptr, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+    while (fscanf(fptr, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                   temp.text) == 3) {
       last_id = temp.id;
     }
   }
 
-  fprintf(fptr, "%d, %d, %s\n", last_id + 1, initial_is_complete, text);
+  fprintf(fptr, "%d,%d,%s\n", last_id + 1, initial_is_complete, text);
 
   fclose(fptr);
 
@@ -86,15 +86,15 @@ int edit_task(char *id_arg, char *text) {
   td temp;
   int found = 0;
 
-  while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(flist, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id) {
-      fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, text);
+      fprintf(ftemp, "%d,%d,%s\n", temp.id, temp.is_complete, text);
       found = 1;
       continue;
     }
 
-    fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
+    fprintf(ftemp, "%d,%d,%s\n", temp.id, temp.is_complete, temp.text);
   }
 
   fclose(flist);
@@ -130,7 +130,7 @@ int swap_tasks(char *id_1_arg, char *id_2_arg) {
 
   int count = 0;
 
-  while (fscanf(flist, " %d, %d, %255[^\n]", &tasks[count].id,
+  while (fscanf(flist, " %d,%d,%255[^\n]", &tasks[count].id,
                 &tasks[count].is_complete, tasks[count].text) == 3) {
     if (tasks[count].id == id_1) {
       found_1 = 1;
@@ -165,14 +165,14 @@ int swap_tasks(char *id_1_arg, char *id_2_arg) {
 
   for (int i = 0; i < count; i++) {
     if (tasks[i].id == id_1) {
-      fprintf(ftemp, "%d, %d, %s\n", id_2, tasks[i].is_complete, tasks[i].text);
+      fprintf(ftemp, "%d,%d,%s\n", id_2, tasks[i].is_complete, tasks[i].text);
       continue;
     } else if (tasks[i].id == id_2) {
-      fprintf(ftemp, "%d, %d, %s\n", id_1, tasks[i].is_complete, tasks[i].text);
+      fprintf(ftemp, "%d,%d,%s\n", id_1, tasks[i].is_complete, tasks[i].text);
       continue;
     }
 
-    fprintf(ftemp, "%d, %d, %s\n", tasks[i].id, tasks[i].is_complete,
+    fprintf(ftemp, "%d,%d,%s\n", tasks[i].id, tasks[i].is_complete,
             tasks[i].text);
   }
 
@@ -200,17 +200,17 @@ int change_status(char *id_arg) {
   td temp;
   int found = 0;
 
-  while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(flist, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id) {
       int current_status = temp.is_complete;
       int new_status = current_status == 0 ? 1 : 0;
-      fprintf(ftemp, "%d, %d, %s\n", temp.id, new_status, temp.text);
+      fprintf(ftemp, "%d,%d,%s\n", temp.id, new_status, temp.text);
       found = 1;
       continue;
     }
 
-    fprintf(ftemp, "%d, %d, %s\n", temp.id, temp.is_complete, temp.text);
+    fprintf(ftemp, "%d,%d,%s\n", temp.id, temp.is_complete, temp.text);
   }
 
   fclose(flist);
@@ -242,14 +242,14 @@ int remove_task(char *id_arg) {
   int found = 0;
   int i = 0;
 
-  while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(flist, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.id == id) {
       found = 1;
       continue; // Skip the task we want to delete
     }
 
-    fprintf(ftemp, "%d, %d, %s\n", i + 1, temp.is_complete, temp.text);
+    fprintf(ftemp, "%d,%d,%s\n", i + 1, temp.is_complete, temp.text);
     i++;
   }
 
@@ -276,10 +276,10 @@ int remove_cmp_task(void) {
   td temp;
   int i = 0;
 
-  while (fscanf(flist, " %d, %d, %255[^\n]", &temp.id, &temp.is_complete,
+  while (fscanf(flist, " %d,%d,%255[^\n]", &temp.id, &temp.is_complete,
                 temp.text) == 3) {
     if (temp.is_complete == 0) {
-      fprintf(ftemp, "%d, %d, %s\n", i + 1, temp.is_complete, temp.text);
+      fprintf(ftemp, "%d,%d,%s\n", i + 1, temp.is_complete, temp.text);
       i++;
     }
   }
